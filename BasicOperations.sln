@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOperations", "BasicOperations\BasicOperations.csproj", "{789E5D21-A0FC-426E-A35F-A4D4F2B933A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOperations", "BasicOperations\BasicOperations.csproj", "{789E5D21-A0FC-426E-A35F-A4D4F2B933A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
