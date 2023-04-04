@@ -23,42 +23,69 @@ namespace BasicOperations.Controllers
         [HttpPost(Name = "Addition")]        
         public decimal Addition(decimal numberOne, decimal numberTwo)
         {
+            OperationHistory operationHistory = new OperationHistory();
+
             try
             {
                 decimal result = numberOne + numberTwo;
-                _basicOperationsRepositories.AddOperationHistory(new OperationHistory { Operation = $"{numberOne} + {numberTwo}", Result = result.ToString(), Date = DateTime.Now, Observations = "" });
+                operationHistory.Operation = $"{numberOne} + {numberTwo}";
+                operationHistory.Result = result.ToString();
+                operationHistory.Date = DateTime.Now;
+                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+
                 return result;
             }
-            catch (ArithmeticException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                _basicOperationsRepositories.AddOperationHistory(new OperationHistory { Operation = $"{numberOne} + {numberTwo}", Result = "0", Date = DateTime.Now, Observations = ex.Message });
                 return 0;
+            }
+            finally
+            {
+                operationHistory = null;
             }
         }
 
         [HttpPost(Name = "Subtraction")]
         public decimal Subtraction(decimal numberOne, decimal numberTwo)
         {
+            OperationHistory operationHistory = new OperationHistory();
+
             try
             {
-                return numberOne - numberTwo;
+                decimal result = numberOne - numberTwo;
+                operationHistory.Operation = $"{numberOne} - {numberTwo}";
+                operationHistory.Result = result.ToString();
+                operationHistory.Date = DateTime.Now;
+                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+
+                return result;
             }
-            catch (ArithmeticException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return 0;
+            }
+            finally
+            {
+                operationHistory = null;
             }
         }
 
         [HttpPost(Name = "Multiplication")]
         public decimal Multiplication(decimal numberOne, decimal numberTwo)
         {
+            OperationHistory operationHistory = new OperationHistory();
             try
             {
-                return numberOne * numberTwo;
+                decimal result = numberOne * numberTwo;
+                operationHistory.Operation = $"{numberOne} * {numberTwo}";
+                operationHistory.Result = result.ToString();
+                operationHistory.Date = DateTime.Now;
+                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                return result;
             }
-            catch (ArithmeticException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return 0;
@@ -68,11 +95,17 @@ namespace BasicOperations.Controllers
         [HttpPost(Name = "Division")]
         public decimal Division(decimal numberOne, decimal numberTwo)
         {
+            OperationHistory operationHistory = new OperationHistory();
             try
             {
-                return numberOne / numberTwo;
+                decimal result = numberOne / numberTwo;
+                operationHistory.Operation = $"{numberOne} / {numberTwo}";
+                operationHistory.Result = result.ToString();
+                operationHistory.Date = DateTime.Now;
+                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                return result;
             }
-            catch (ArithmeticException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return 0;
@@ -80,9 +113,15 @@ namespace BasicOperations.Controllers
         }
 
         [HttpGet]
-        public void ObtenerHistorial()
+        public List<OperationHistory> GetHistory()
         {
+            return _basicOperationsRepositories.GetOperationHistory();
+        }
 
+        [HttpDelete]
+        public bool DeleteHistory()
+        {
+            return _basicOperationsRepositories.DeleteHistory();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using BasicOperations.Domain.Entity;
+﻿using BasicOperations.Controllers;
+using BasicOperations.Domain.Entity;
 using BasicOperations.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 namespace BasicOperations.Repositories
@@ -7,8 +9,11 @@ namespace BasicOperations.Repositories
     public class BasicOperationsRepositories : IBasicOperationsRepositories
     {
         private readonly MatiasContext _context;
-        public BasicOperationsRepositories(MatiasContext context) {
+        private readonly ILogger<BasicOperationsRepositories> _logger;
+
+        public BasicOperationsRepositories(MatiasContext context, ILogger<BasicOperationsRepositories> logger) {
             _context = context;
+            _logger = logger;
         }
         public bool AddOperationHistory(OperationHistory operationHistory)
         {
@@ -18,19 +23,38 @@ namespace BasicOperations.Repositories
                 _context.SaveChanges();
                 return true;
             } 
-            catch (Exception ex){ 
+            catch (Exception ex){
+                _logger.LogError(ex.Message);
                 return false;
             }
         }
 
         public bool DeleteHistory()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.OperationHistories.ExecuteDelete();
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
         }
 
         public List<OperationHistory> GetOperationHistory()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _context.OperationHistories.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
         }
     }
 }
