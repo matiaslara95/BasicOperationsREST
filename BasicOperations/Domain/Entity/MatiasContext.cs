@@ -17,7 +17,7 @@ public partial class MatiasContext : DbContext
 
     public virtual DbSet<OperationHistory> OperationHistories { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Server=database-sql-server.chtzsvhnbqgw.ap-southeast-2.rds.amazonaws.com;Database=matias;User Id=admin;Password=Matias639;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Server=database-sql-server.chtzsvhnbqgw.ap-southeast-2.rds.amazonaws.com;Database=matias;User Id=admin;Password=Admin123;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
