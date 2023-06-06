@@ -1,5 +1,5 @@
 ﻿using BasicOperations.Controllers;
-using BasicOperations.Domain.Entity;
+using BasicOperations.Entity.Models;
 using BasicOperations.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
@@ -8,10 +8,10 @@ namespace BasicOperations.Repositories
 {
     public class BasicOperationsRepositories : IBasicOperationsRepositories
     {
-        private readonly MatiasContext _context;
+        private readonly BasicOperationsContext _context;
         private readonly ILogger<BasicOperationsRepositories> _logger;
 
-        public BasicOperationsRepositories(MatiasContext context, ILogger<BasicOperationsRepositories> logger) {
+        public BasicOperationsRepositories(BasicOperationsContext context, ILogger<BasicOperationsRepositories> logger) {
             _context = context;
             _logger = logger;
         }
@@ -19,8 +19,8 @@ namespace BasicOperations.Repositories
         {
             try
             {
-                _context.OperationHistories.Add(operationHistory);
-                _context.SaveChanges();
+                //_context.OperationHistories.Add(operationHistory);
+                //_context.SaveChanges();
                 return true;
             } 
             catch (Exception ex){
@@ -33,8 +33,8 @@ namespace BasicOperations.Repositories
         {
             try
             {
-                _context.OperationHistories.ExecuteDelete();
-                _context.SaveChanges();
+                //_context.OperationHistories.ExecuteDelete();
+                //_context.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -48,7 +48,8 @@ namespace BasicOperations.Repositories
         {
             try
             {
-                return _context.OperationHistories.ToList();
+                //return _context.OperationHistories.ToList();
+                return null;
             }
             catch (Exception ex)
             {

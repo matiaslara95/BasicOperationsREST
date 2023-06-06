@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BasicOperations.Domain.Entity;
+namespace BasicOperations.Entity.Models;
 
 public partial class OperationHistory
 {

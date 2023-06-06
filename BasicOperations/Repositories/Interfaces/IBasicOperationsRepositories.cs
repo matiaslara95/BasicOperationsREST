@@ -1,4 +1,4 @@
-﻿using BasicOperations.Domain.Entity;
+﻿using BasicOperations.Entity.Models;
 
 namespace BasicOperations.Repositories.Interfaces
 {

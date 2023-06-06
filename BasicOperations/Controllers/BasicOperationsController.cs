@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Runtime.CompilerServices;
-using BasicOperations.Domain.Entity;
+using BasicOperations.Entity.Models;
 
 namespace BasicOperations.Controllers
 {
