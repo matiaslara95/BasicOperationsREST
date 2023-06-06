@@ -13,7 +13,7 @@ namespace BasicOperations.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
-    public class AccountsController : ControllerBase    
+    public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
@@ -91,19 +91,26 @@ namespace BasicOperations.Controllers
         [HttpPost("tfa-setup")]
         public async Task<IActionResult> PostTfaSetup([FromBody] TfaSetup tfaModel)
         {
-            var user = await _userManager.FindByNameAsync(tfaModel.Email);
-            var isValidCode = await _userManager
-            .VerifyTwoFactorTokenAsync(user,
-                  _userManager.Options.Tokens.AuthenticatorTokenProvider,
-                  tfaModel.Code);
-            if (isValidCode)
+            try
             {
-                await _userManager.SetTwoFactorEnabledAsync(user, true);
-                return Ok(new TfaSetup { IsTfaEnabled = true });
+                var user = await _userManager.FindByNameAsync(tfaModel.Email);
+                var isValidCode = await _userManager
+                .VerifyTwoFactorTokenAsync(user,
+                      _userManager.Options.Tokens.AuthenticatorTokenProvider,
+                      tfaModel.Code);
+                if (isValidCode)
+                {
+                    await _userManager.SetTwoFactorEnabledAsync(user, true);
+                    return Ok(new TfaSetup { IsTfaEnabled = true });
+                }
+                else
+                {
+                    return BadRequest("Invalid code");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Invalid code");
+                throw ex;
             }
         }
 

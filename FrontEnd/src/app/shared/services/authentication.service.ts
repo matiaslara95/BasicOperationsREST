@@ -31,11 +31,10 @@ export class AuthenticationService {
     return this.http.delete<TfaSetupDto> (`${environment.apiUrl}/accounts/tfa-setup?email=${email}`);
   }
 
+  //Login
   public loginUser = (body: UserForAuthentication) => {
-    console.log(`${environment.apiUrl}/accounts/login`)
     return this.http.post<AuthResponse>(`${environment.apiUrl}/accounts/login`, body);
   }
-
   public loginUserTfa = (body: TfaDto) => {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/accounts/login-tfa`, body);
   }

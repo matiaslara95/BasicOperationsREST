@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TfaSetupDto } from 'src/app/models/tfa-setup-dto';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 
@@ -11,10 +11,10 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 })
 export class TfaSetupComponent implements OnInit {
 
-  tfaForm: FormGroup = new FormGroup({
+  tfaForm: FormGroup  = new FormGroup({
     code: new FormControl("", [Validators.required])
   });
-  
+
   isLoading: boolean = true;
   tfaEnabled: boolean = false;
   showError: boolean = false;
@@ -27,18 +27,19 @@ export class TfaSetupComponent implements OnInit {
   ngOnInit(): void {
     let email = localStorage.getItem("email") ?? '';
     this.authService.getTfaSetup(email)
-      .subscribe((response: TfaSetupDto) => {
+      .subscribe((response:TfaSetupDto) => {
         this.tfaEnabled = response.isTfaEnabled ?? false;
         this.qrInfo = response.formattedKey ?? '';
         this.authenticatorKey = response.authenticatorKey ?? '';
         this.isLoading = false;
       }
-      );
+    );
   }
 
   validateControl = (controlName: string) => {
     return this.tfaForm.get(controlName)?.invalid && this.tfaForm.get(controlName)?.touched
   }
+
   hasError = (controlName: string, errorName: string) => {
     return this.tfaForm.get(controlName)?.hasError(errorName)
   }
@@ -46,20 +47,19 @@ export class TfaSetupComponent implements OnInit {
   disableTfa = () => {
     let email = localStorage.getItem("email") ?? '';
     this.authService.disableTfa(email)
-      .subscribe({
-        next: (res: any) => {
-          this.tfaEnabled = false;
-        },
-        error: (err: HttpErrorResponse) => {
-          this.showError = true;
-          this.errorMessage
-            = "Two-factor authentication was not disabled for this account (Message: " + err.message + ")";
-        }
-      })
+    .subscribe({
+      next: (res:any) => {
+        this.tfaEnabled = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.showError = true;
+        this.errorMessage = "Two-factor authentication was not disabled for this account (Message: " + err.message + ")";
+      }})
   }
 
   enableTfa = (tfaFormValue: any) => {
-    const tfaForm = { ...tfaFormValue };
+    const tfaForm = {... tfaFormValue };
+
     const tfaSetupDto: TfaSetupDto = {
       email: localStorage.getItem("email") ?? '',
       code: tfaForm.code,
@@ -67,17 +67,15 @@ export class TfaSetupComponent implements OnInit {
       formattedKey: null,
       isTfaEnabled: false
     }
-    
+
     this.authService.postTfaSetup(tfaSetupDto)
-      .subscribe({
-        next: (res: any) => {
-          this.tfaEnabled = true;
-        },
-        error: (err: HttpErrorResponse) => {
-          this.showError = true;
-          this.errorMessage
-            = "Two-factor authentication was not activated for this account (Message: " + err.message + ")";
-        }
-      })
-  }
+    .subscribe({
+      next: (res:any) => {
+        this.tfaEnabled = true;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.showError = true;
+        this.errorMessage = "Two-factor authentication was not activated for this account (Message: " + err.message + ")";
+      }})
+  }  
 }

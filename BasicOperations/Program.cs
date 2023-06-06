@@ -28,7 +28,13 @@ builder.Services.AddCors(options =>
 
 //var connectionString = builder.Configuration.GetConnectionString("AppDb");
 builder.Services.AddDbContext<BasicOperationsContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BasicOperationsContext>();
+//builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BasicOperationsContext>();
+
+builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+     .AddRoles<IdentityRole>()
+     .AddEntityFrameworkStores<BasicOperationsContext>()
+     .AddDefaultTokenProviders();
+
 builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

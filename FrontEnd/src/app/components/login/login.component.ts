@@ -58,7 +58,7 @@ export class LoginComponent {
     .subscribe({
       next: (res:AuthResponse) => {
        this.isTfaEnabled = res.isTfaEnabled;
-       
+       console.log("this.isTfaEnabled", this.isTfaEnabled)
        if(this.isTfaEnabled){
         this.router.navigate(['twostepverification'], 
           { queryParams: { returnUrl: this.returnUrl, email: login.email }})
