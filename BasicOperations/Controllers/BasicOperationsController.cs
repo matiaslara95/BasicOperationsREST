@@ -4,34 +4,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Runtime.CompilerServices;
 using BasicOperations.Entity.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasicOperations.Controllers
 {
+    [Route("api/operations")]
     [ApiController]
-    [Route("[action]")]
     public class BasicOperationsController : Controller
     {
         private readonly ILogger<BasicOperationsController> _logger;
-        private readonly IBasicOperationsRepositories _basicOperationsRepositories;
+        //private readonly IBasicOperationsRepositories _basicOperationsRepositories;
 
-        public BasicOperationsController(ILogger<BasicOperationsController> logger, IBasicOperationsRepositories basicOperationsRepositories)
+        public BasicOperationsController(ILogger<BasicOperationsController> logger)
         {
             _logger = logger;
-            _basicOperationsRepositories = basicOperationsRepositories;
+            //_basicOperationsRepositories = basicOperationsRepositories;
         }
 
-        [HttpPost(Name = "Addition")]        
-        public decimal Addition(decimal numberOne, decimal numberTwo)
+        [HttpPost("addition")]
+        [Authorize]
+        public decimal Addition(Operations numbers)
         {
             OperationHistory operationHistory = new OperationHistory();
 
             try
             {
-                decimal result = numberOne + numberTwo;
-                operationHistory.Operation = $"{numberOne} + {numberTwo}";
+                decimal result = numbers.NumberOne + numbers.NumberTwo;
+                operationHistory.Operation = $"{numbers.NumberOne} + {numbers.NumberTwo}";
                 operationHistory.Result = result.ToString();
                 operationHistory.Date = DateTime.Now;
-                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                //_basicOperationsRepositories.AddOperationHistory(operationHistory);
 
                 return result;
             }
@@ -46,7 +48,7 @@ namespace BasicOperations.Controllers
             }
         }
 
-        [HttpPost(Name = "Subtraction")]
+        [HttpPost("Subtraction")]
         public decimal Subtraction(decimal numberOne, decimal numberTwo)
         {
             OperationHistory operationHistory = new OperationHistory();
@@ -57,7 +59,7 @@ namespace BasicOperations.Controllers
                 operationHistory.Operation = $"{numberOne} - {numberTwo}";
                 operationHistory.Result = result.ToString();
                 operationHistory.Date = DateTime.Now;
-                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                //_basicOperationsRepositories.AddOperationHistory(operationHistory);
 
                 return result;
             }
@@ -72,7 +74,7 @@ namespace BasicOperations.Controllers
             }
         }
 
-        [HttpPost(Name = "Multiplication")]
+        [HttpPost("Multiplication")]
         public decimal Multiplication(decimal numberOne, decimal numberTwo)
         {
             OperationHistory operationHistory = new OperationHistory();
@@ -82,7 +84,7 @@ namespace BasicOperations.Controllers
                 operationHistory.Operation = $"{numberOne} * {numberTwo}";
                 operationHistory.Result = result.ToString();
                 operationHistory.Date = DateTime.Now;
-                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                //_basicOperationsRepositories.AddOperationHistory(operationHistory);
                 return result;
             }
             catch (Exception ex)
@@ -92,7 +94,7 @@ namespace BasicOperations.Controllers
             }
         }
 
-        [HttpPost(Name = "Division")]
+        [HttpPost("Division")]
         public decimal Division(decimal numberOne, decimal numberTwo)
         {
             OperationHistory operationHistory = new OperationHistory();
@@ -102,7 +104,7 @@ namespace BasicOperations.Controllers
                 operationHistory.Operation = $"{numberOne} / {numberTwo}";
                 operationHistory.Result = result.ToString();
                 operationHistory.Date = DateTime.Now;
-                _basicOperationsRepositories.AddOperationHistory(operationHistory);
+                //_basicOperationsRepositories.AddOperationHistory(operationHistory);
                 return result;
             }
             catch (Exception ex)
@@ -112,16 +114,16 @@ namespace BasicOperations.Controllers
             }
         }
 
-        [HttpGet]
-        public List<OperationHistory> GetHistory()
-        {
-            return _basicOperationsRepositories.GetOperationHistory();
-        }
+        //[HttpGet]
+        //public List<OperationHistory> GetHistory()
+        //{
+        //    //return _basicOperationsRepositories.GetOperationHistory();
+        //}
 
-        [HttpDelete]
-        public bool DeleteHistory()
-        {
-            return _basicOperationsRepositories.DeleteHistory();
-        }
+        //[HttpDelete]
+        //public bool DeleteHistory()
+        //{
+        //    //return _basicOperationsRepositories.DeleteHistory();
+        //}
     }
 }

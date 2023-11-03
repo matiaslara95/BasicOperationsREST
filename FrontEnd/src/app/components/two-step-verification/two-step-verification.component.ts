@@ -2,9 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { tokenGetter } from 'src/app/app.module';
 import { AuthResponse } from 'src/app/interfaces/response/AuthResponse';
 import { TfaDto } from 'src/app/models/tfa-dto';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { OperationService } from 'src/app/shared/services/operation.service';
 
 @Component({
   selector: 'app-two-step-verification',
@@ -22,6 +24,7 @@ export class TwoStepVerificationComponent {
   errorMessage: string = "";
 
   constructor(private authService: AuthenticationService,
+    private operationService: OperationService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -52,6 +55,13 @@ export class TwoStepVerificationComponent {
         localStorage.setItem("token", res.token);
         localStorage.setItem("email", this.email);
         this.router.navigate([this.returnUrl]);
+                
+        //JWT TEST
+        this.operationService.addition({ numberOne: 1, numberTwo: 2 }).subscribe({
+          next: (res: any) => {
+            console.log(res)
+          }
+        })
       },
       error: (err: HttpErrorResponse) => {
         this.errorMessage = err.message;

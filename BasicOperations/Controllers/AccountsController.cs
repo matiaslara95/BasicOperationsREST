@@ -129,6 +129,36 @@ namespace BasicOperations.Controllers
             }
         }
 
+        /// <summary>
+        /// LOGIN TFA
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="unformattedKey"></param>
+        /// <returns></returns>
+        [HttpPost("login-tfa")]
+        public async Task<IActionResult> LoginTfa([FromBody] TfaDto tfaDto)
+        {
+            var user = await _userManager.FindByNameAsync(tfaDto.Email);
+            if (user == null)
+                return Unauthorized(new AuthResponse { ErrorMessage = "Invalid Authentication" });
+            var validVerification =
+              await _userManager.VerifyTwoFactorTokenAsync(
+                 user, _userManager.Options.Tokens.AuthenticatorTokenProvider, tfaDto.Code);
+            if (!validVerification)
+                return BadRequest("Invalid Token Verification");
+            var signingCredentials = _jwtHandler.GetSigningCredentials();
+            var claims = _jwtHandler.GetClaims(user);
+            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new AuthResponse { IsAuthSuccessful = true, IsTfaEnabled = true, Token = token });
+        }
+
+        /// <summary>
+        /// QR
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="unformattedKey"></param>
+        /// <returns></returns>
         private string GenerateQRCode(string email, string unformattedKey)
         {
             return string.Format(
